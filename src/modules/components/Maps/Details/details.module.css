@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+
+}
+.form {
+    max-width: 500px;
+    box-shadow: none;
+}
+.input {
+    margin-top: .5rem;
+}
+.form {
+    padding: 1rem;
+}
+.link {
+    cursor: pointer;
+    padding: .8rem 1.6rem;
+    margin: .5rem;
+    background-color: blue;
+    color: white;
+    font-size: 1.2rem;
+    border-radius: .6rem;
+    border: none;
+    text-decoration: none;
+}
