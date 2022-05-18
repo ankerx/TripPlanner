@@ -1,12 +1,12 @@
 import Trip from "./Trip/Trip";
 import styles from "./trips.module.css";
 function Trips({ details }) {
-  //   details && details.map((el) => console.log(el));
   return (
     <div className={styles.container}>
       {details ? (
-        details.map((el) => (
+        details.map((el, index) => (
           <Trip
+            key={index}
             distance={el.distance}
             time={el.time}
             price={el.price}
@@ -15,7 +15,7 @@ function Trips({ details }) {
           />
         ))
       ) : (
-        <div>Loading...</div>
+        <div>Choose your first trip!</div>
       )}
     </div>
   );

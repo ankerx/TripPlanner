@@ -1,5 +1,5 @@
 function Loading() {
-  return <div>Loading...</div>;
+  return <div>Choose your first trip!</div>;
 }
 
 export default Loading;

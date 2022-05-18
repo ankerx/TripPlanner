@@ -1,7 +1,7 @@
 import { MapDisplay } from "./MapDisplay/MapDisplay";
-import { Route } from "../../../../core/api/FetchData";
+import { Route } from "../../../core/api/FetchData";
 import axios from "axios";
-import { KEY } from "../../../../core/api/FetchData";
+import { KEY } from "../../../core/api/FetchData";
 import { useEffect, useState } from "react";
 import Details from "../Details/Details";
 import styles from "./map.module.css";

@@ -1,5 +1,5 @@
-import Map from "./modules/components/Maps/Map/Map";
-import Main from "./modules/components/Home/Main/Main";
+import Map from "./modules/Maps/Map/Map";
+import Main from "./modules/Home/Main/Main";
 import axios from "axios";
 import { useState } from "react";
 import { Localization } from "./core/api/FetchData";
@@ -25,8 +25,7 @@ function App() {
       [name]: value,
     });
   };
-  console.log(details);
-  console.log(roadLength);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const req1 = axios.get(Localization(values.firstDestination, "", ""));
