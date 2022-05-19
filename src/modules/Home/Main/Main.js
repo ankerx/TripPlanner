@@ -1,6 +1,6 @@
 import Trips from "../Trips/Trips";
 import styles from "./main.module.css";
-function Main({ handleSubmit, values, handleChange, details }) {
+function Main({ handleSubmit, values, handleChange, details, errors }) {
   return (
     <>
       <div className={styles.container}>
@@ -19,6 +19,12 @@ function Main({ handleSubmit, values, handleChange, details }) {
             value={values.secondDestination}
             onChange={handleChange}
           />
+
+          {errors && (
+            <p data-testid="error" className={styles.error}>
+              {errors}
+            </p>
+          )}
           <button onClick={handleSubmit}>Find the route</button>
         </form>
       </div>

@@ -14,49 +14,47 @@ function Map({
   setPrice,
   price,
   setDetails,
-
   values,
 }) {
   const coordinates = cords ? cords.map((el) => el.data.items[0].position) : "";
   const [firstCords] = useState(`${coordinates[0].lat},${coordinates[0].lng}`);
   const [secondCords] = useState(`${coordinates[1].lat},${coordinates[1].lng}`);
-
+  const [error, setError] = useState("");
   const FetchRouteData = async () => {
-    const { data } = await axios.get(Route(firstCords, secondCords), {
-      params: { apikey: KEY },
-    });
-    console.log(data);
-    setRoadTime(data.routes[0].sections[0].summary.duration / 60);
-    setRoadLength(data.routes[0].sections[0].summary.length / 1000);
+    try {
+      const { data } = await axios.get(Route(firstCords, secondCords), {
+        params: { apikey: KEY },
+      });
+      if (!data.notices) {
+        console.log(data);
+        setRoadTime(data.routes[0].sections[0].summary.duration / 60);
+        setRoadLength(data.routes[0].sections[0].summary.length / 1000);
+      } else {
+        setError(data.notices[0]);
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
   };
-
+  cords && cords.map((el) => console.log(el.data.items));
   useEffect(() => {
     FetchRouteData();
   }, []);
-  // useEffect(() => {
-  //   setDetails((prev) => {
-  //     const newDetails = {
-  //       distance: roadLength,
-  //       time: roadTime,
-  //       price: price,
-  //       // from: values.firstDestination,
-  //       // to: values.secondDestination,
-  //     };
-  //     return [...prev, newDetails];
-  //   });
-  //   console.log(details);
-  // }, []);
+
   return (
     <div className={styles.container}>
       <MapDisplay cords={cords} />
-      <Details
-        roadTime={roadTime}
-        roadLength={roadLength}
-        price={price}
-        setPrice={setPrice}
-        setDetails={setDetails}
-        values={values}
-      />
+      {!error && (
+        <Details
+          roadTime={roadTime}
+          roadLength={roadLength}
+          price={price}
+          setPrice={setPrice}
+          setDetails={setDetails}
+          values={values}
+        />
+      )}
+      <p>{error && error.title}</p>
     </div>
   );
 }

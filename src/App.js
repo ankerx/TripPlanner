@@ -25,17 +25,32 @@ function App() {
       [name]: value,
     });
   };
+  const [errors, setErrors] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const req1 = axios.get(Localization(values.firstDestination, "", ""));
-    const req2 = axios.get(Localization(values.secondDestination, "", ""));
-    const res = await axios.all([req1, req2]);
-    console.log(res);
-    setCords(res);
-    navigate("/map");
+    if (values.firstDestination.length && values.secondDestination.length > 2) {
+      try {
+        const req1 = axios.get(Localization(values.firstDestination, "", ""));
+        const req2 = axios.get(Localization(values.secondDestination, "", ""));
+        const res = await axios.all([req1, req2]);
+        console.log(res);
+        setCords(res);
+        if (cords.map((el) => el.data.items.length === 0)) {
+          setErrors("Unable to find a route");
+        } else {
+          navigate("/map");
+          setErrors(false);
+        }
+      } catch (err) {
+        setErrors("Unable to find a route");
+        throw new Error("Unable to find a route");
+      }
+    } else {
+      return setErrors("Inputs are not valid!");
+    }
   };
-
+  console.log(errors);
   return (
     <div className="App">
       <Routes>
@@ -50,6 +65,7 @@ function App() {
               cords={cords}
               setCords={setCords}
               details={details}
+              errors={errors}
             />
           }
         />
