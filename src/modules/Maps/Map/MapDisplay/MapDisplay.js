@@ -1,5 +1,6 @@
 import React from "react";
 
+import onResize from "simple-element-resize-detector";
 export const MapDisplay = ({ cords }) => {
   const KEY = "gfWzZOqGZJ_sGQ-L-zHN_9CrpD3D6rGn1v65eQW_CPg";
   // Create a reference to the HTML element we want to put the map on
@@ -70,13 +71,22 @@ export const MapDisplay = ({ cords }) => {
     router.calculateRoute(routingParameters, onResult, function (error) {
       alert(error.message);
     });
-    // const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(hMap));
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-    // const ui = H.ui.UI.createDefault(hMap, defaultLayers);
+    const ui = H.ui.UI.createDefault(map, defaultLayers);
+    onResize(mapRef.current, () => {
+      map.getViewPort().resize();
+    });
     return () => {
       map.dispose();
     };
   }, [mapRef, firstCords, secondCords]);
 
-  return <div className="map" ref={mapRef} style={{ height: "400px" }} />;
+  return (
+    <div
+      className="map"
+      ref={mapRef}
+      style={{ position: "relative", width: "100%", height: "400px" }}
+    />
+  );
 };

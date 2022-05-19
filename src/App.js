@@ -33,16 +33,6 @@ function App() {
     const res = await axios.all([req1, req2]);
     console.log(res);
     setCords(res);
-    setDetails((prev) => {
-      const newDetails = {
-        distance: roadLength,
-        time: roadTime,
-        price: price,
-        from: values.firstDestination,
-        to: values.secondDestination,
-      };
-      return [...prev, newDetails];
-    });
     navigate("/map");
   };
 
@@ -75,6 +65,8 @@ function App() {
                 roadTime={roadTime}
                 price={price}
                 setPrice={setPrice}
+                setDetails={setDetails}
+                values={values}
               />
             ) : (
               <Main

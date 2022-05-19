@@ -3,7 +3,7 @@ import styles from "./trips.module.css";
 function Trips({ details }) {
   return (
     <div className={styles.container}>
-      {details ? (
+      {details && details.length > 0 ? (
         details.map((el, index) => (
           <Trip
             key={index}

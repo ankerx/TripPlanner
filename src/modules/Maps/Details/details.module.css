@@ -16,13 +16,16 @@
     padding: 1rem;
 }
 .link {
-    cursor: pointer;
+    /* cursor: pointer;
     padding: .8rem 1.6rem;
     margin: .5rem;
     background-color: blue;
     color: white;
     font-size: 1.2rem;
-    border-radius: .6rem;
+    border-radius: .6rem; */
     border: none;
     text-decoration: none;
+}
+h2 {
+    margin-bottom: 1rem;
 }

@@ -1,0 +1,21 @@
+/* .container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: hidden;
+    background-color: rgba(249, 249, 249, 0.8);
+} */
+
+.modal {
+    position: absolute;
+    width: 300px;
+    text-align: center;
+    border:1px solid black;
+    border-radius: 1rem;
+    background-color: white;
+    padding: 2rem;
+    top:40%;
+    left:calc(50% - 150px);
+}

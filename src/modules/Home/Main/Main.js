@@ -22,6 +22,7 @@ function Main({ handleSubmit, values, handleChange, details }) {
           <button onClick={handleSubmit}>Find the route</button>
         </form>
       </div>
+
       <Trips details={details} />
     </>
   );

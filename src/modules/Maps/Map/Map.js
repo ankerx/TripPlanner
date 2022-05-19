@@ -13,6 +13,9 @@ function Map({
   roadTime,
   setPrice,
   price,
+  setDetails,
+
+  values,
 }) {
   const coordinates = cords ? cords.map((el) => el.data.items[0].position) : "";
   const [firstCords] = useState(`${coordinates[0].lat},${coordinates[0].lng}`);
@@ -26,9 +29,23 @@ function Map({
     setRoadTime(data.routes[0].sections[0].summary.duration / 60);
     setRoadLength(data.routes[0].sections[0].summary.length / 1000);
   };
+
   useEffect(() => {
     FetchRouteData();
   }, []);
+  // useEffect(() => {
+  //   setDetails((prev) => {
+  //     const newDetails = {
+  //       distance: roadLength,
+  //       time: roadTime,
+  //       price: price,
+  //       // from: values.firstDestination,
+  //       // to: values.secondDestination,
+  //     };
+  //     return [...prev, newDetails];
+  //   });
+  //   console.log(details);
+  // }, []);
   return (
     <div className={styles.container}>
       <MapDisplay cords={cords} />
@@ -37,6 +54,8 @@ function Map({
         roadLength={roadLength}
         price={price}
         setPrice={setPrice}
+        setDetails={setDetails}
+        values={values}
       />
     </div>
   );
