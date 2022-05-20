@@ -11,19 +11,19 @@ function App() {
   const [roadLength, setRoadLength] = useState(0);
   const [price, setPrice] = useState(0);
   const [cords, setCords] = useState();
-  const [values, setValues] = useState({
-    firstDestination: "",
-    secondDestination: "",
-  });
+//   const [values, setValues] = useState({
+//     firstDestination: "",
+//     secondDestination: "",
+//   });
 
-  const [details, setDetails] = useState([]);
+//   const [details, setDetails] = useState([]);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
+//   const handleChange = (event) => {
+//     const { name, value } = event.target;
+//     setValues({
+//       ...values,
+//       [name]: value,
+//     });
   };
   const [errors, setErrors] = useState("");
 
