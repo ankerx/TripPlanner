@@ -31,12 +31,15 @@ function App() {
     event.preventDefault();
     if (values.firstDestination.length && values.secondDestination.length > 2) {
       try {
-        const req1 = axios.get(Localization(values.firstDestination, "", ""));
-        const req2 = axios.get(Localization(values.secondDestination, "", ""));
-        const res = await axios.all([req1, req2]);
-        console.log(res);
+        const reqOne = axios.get(Localization(values.firstDestination, "", ""));
+        const reqTwo = axios.get(
+          Localization(values.secondDestination, "", "")
+        );
+        const res = await axios.all([reqOne, reqTwo]);
+        const firstResponse = await res[0].data.items.length;
+        const secondResponse = await res[1].data.items.length;
         setCords(res);
-        if (cords.map((el) => el.data.items.length === 0)) {
+        if (firstResponse === 0 || secondResponse === 0) {
           setErrors("Unable to find a route");
         } else {
           navigate("/map");

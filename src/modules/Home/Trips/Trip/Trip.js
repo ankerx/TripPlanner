@@ -3,7 +3,6 @@ import styles from "./trip.module.css";
 function Trip({ distance, time, price, from, to }) {
   return (
     <div className={styles.container}>
-      <h2 data-testid="test">elelelele</h2>
       <p>From: {from}</p>
       <p>To: {to}</p>
       <p>Distance: {distance.toFixed(1)} km</p>

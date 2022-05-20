@@ -5,6 +5,7 @@ import { KEY } from "../../../core/api/FetchData";
 import { useEffect, useState } from "react";
 import Details from "../Details/Details";
 import styles from "./map.module.css";
+import { Link } from "react-router-dom";
 function Map({
   cords,
   setRoadLength,
@@ -54,7 +55,14 @@ function Map({
           values={values}
         />
       )}
-      <p>{error && error.title}</p>
+      {error && (
+        <div className={styles.error}>
+          <p className={styles.message}> {error.title}</p>
+          <Link className={styles.link} to="/">
+            Back to home
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
