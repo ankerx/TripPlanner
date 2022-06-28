@@ -1,49 +1,88 @@
 import Map from "./modules/Maps/Map/Map";
-import Main from "./modules/Home/Main/Main";
+import { Form } from "./modules/Home/Form/Form";
 import axios from "axios";
-import { useState } from "react";
-import { Localization } from "./core/api/FetchData";
+import { ChangeEvent, MouseEvent, useState } from "react";
+import { localization } from "./core/api/fetchData";
 import { Routes, Route, useNavigate } from "react-router-dom";
+
+export interface Details {
+  from: string;
+  to: string;
+  distance: number;
+  time: number;
+  price: number;
+}
+export interface Cords {
+  [key: string]: any;
+}
+export interface Data {
+  address: {
+    label: string;
+  };
+  position: {
+    lat: number;
+    lng: number;
+  };
+  title: string;
+}
 
 function App() {
   const navigate = useNavigate();
+  const [data, setData] = useState<Data[]>([]);
+
   const [roadTime, setRoadTime] = useState(0);
   const [roadLength, setRoadLength] = useState(0);
   const [price, setPrice] = useState(0);
-  const [cords, setCords] = useState();
+
+  const [errors, setErrors] = useState("");
+
+  const [cords, setCords] = useState<Array<Cords>>([]);
   const [values, setValues] = useState({
     firstDestination: "",
     secondDestination: "",
   });
 
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState<Array<Details>>([]);
 
-  const handleChange = (event) => {
+  const saveDetails = () => {
+    setDetails((prev) => {
+      const newDetails = {
+        from: values.firstDestination,
+        to: values.secondDestination,
+        distance: roadLength,
+        time: roadTime,
+        price: price,
+      };
+      return [...prev, newDetails];
+    });
+  };
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({
       ...values,
       [name]: value,
     });
   };
-  const [errors, setErrors] = useState("");
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (values.firstDestination.length && values.secondDestination.length > 2) {
       try {
-        const reqOne = axios.get(Localization(values.firstDestination, "", ""));
+        const reqOne = axios.get(localization(values.firstDestination, "", ""));
         const reqTwo = axios.get(
-          Localization(values.secondDestination, "", "")
+          localization(values.secondDestination, "", "")
         );
         const res = await axios.all([reqOne, reqTwo]);
         const firstResponse = await res[0].data.items.length;
         const secondResponse = await res[1].data.items.length;
+        const data: Data[] = res.map((item) => item.data.items);
+        setData(data);
         setCords(res);
         if (firstResponse === 0 || secondResponse === 0) {
           setErrors("Unable to find a route");
         } else {
           navigate("/map");
-          setErrors(false);
+          setErrors("");
         }
       } catch (err) {
         setErrors("Unable to find a route");
@@ -53,20 +92,17 @@ function App() {
       return setErrors("Inputs are not valid!");
     }
   };
-  console.log(errors);
+
   return (
     <div className="App">
       <Routes>
         <Route
           path="/"
           element={
-            <Main
+            <Form
               values={values}
-              setValues={setValues}
               handleChange={handleChange}
               handleSubmit={handleSubmit}
-              cords={cords}
-              setCords={setCords}
               details={details}
               errors={errors}
             />
@@ -75,8 +111,9 @@ function App() {
         <Route
           path="/map"
           element={
-            cords ? (
+            cords && (
               <Map
+                data={data}
                 cords={cords}
                 setRoadLength={setRoadLength}
                 setRoadTime={setRoadTime}
@@ -84,17 +121,8 @@ function App() {
                 roadTime={roadTime}
                 price={price}
                 setPrice={setPrice}
-                setDetails={setDetails}
                 values={values}
-              />
-            ) : (
-              <Main
-                values={values}
-                setValues={setValues}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                cords={cords}
-                setCords={setCords}
+                saveDetails={saveDetails}
               />
             )
           }

@@ -1,19 +1,52 @@
 import { jsPDF } from "jspdf";
-import SaveModal from "../../Home/Trips/Modal/SaveModal";
+import { Modal } from "../../Home/Trips/Modal/Modal";
 import { Link } from "react-router-dom";
-import styles from "./details.module.css";
-import { useEffect, useState } from "react";
+import { capitalize } from "../../../core/utils";
+import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 
-function Details({
+interface Props {
+  roadTime: number;
+  roadLength: number;
+  price: number;
+  setPrice: (arg: number) => void;
+  values: {
+    firstDestination: string;
+    secondDestination: string;
+  };
+  saveDetails: () => void;
+}
+export const Details = ({
   roadTime,
   roadLength,
   price,
   setPrice,
   values,
-  setDetails,
-}) {
+  saveDetails,
+}: Props) => {
   const [temp, setTemp] = useState("");
+  const [saved, setSaved] = useState(false);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPrice(parseInt(event.target.value));
+  };
+  const generatePdf = () => {
+    const pdf = new jsPDF("portrait", "pt", "a4");
+    const data = document.querySelector("#pdf") as HTMLDivElement;
+    pdf.html(data).then(() => {
+      pdf.save("road.pdf");
+    });
+  };
+
+  const handleSave = () => {
+    saveDetails();
+    setSaved(true);
+
+    setTimeout(() => {
+      setSaved(false);
+    }, 3000);
+  };
+
   useEffect(() => {
     const options = {
       method: "GET",
@@ -31,51 +64,18 @@ function Details({
         console.log(error);
       });
   }, [values.secondDestination]);
-
-  const [saved, setSaved] = useState(false);
-  const handleChange = (event) => {
-    setPrice(event.target.value);
-  };
-  const generatePdf = () => {
-    const pdf = new jsPDF("portrait", "pt", "a4");
-    const data = document.querySelector("#pdf");
-    pdf.html(data).then(() => {
-      pdf.save("road.pdf");
-    });
-  };
-  const handleSave = () => {
-    setDetails((prev) => {
-      const newDetails = {
-        from: values.firstDestination,
-        to: values.secondDestination,
-        distance: roadLength,
-        time: roadTime,
-        price: price,
-      };
-      return [...prev, newDetails];
-    });
-    setSaved(true);
-
-    setTimeout(() => {
-      setSaved(false);
-    }, 3000);
-  };
-  const Capitalize = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
   return (
-    <div className={styles.container} id="pdf">
+    <div id="pdf">
       <h2>Details:</h2>
       <p>
-        Current temperature in {Capitalize(values.secondDestination)}: {temp}
+        Current temperature in {capitalize(values.secondDestination)}: {temp}
         °C
       </p>
       <p>Distance: {roadLength.toFixed(1)} km</p>
       <p>Time: {roadTime.toFixed(0)} minutes</p>
-      <form className={styles.form}>
+      <form>
         <label>Price for kilometer $</label>
         <input
-          className={styles.input}
           type="number"
           placeholder="Put the price"
           value={price}
@@ -83,17 +83,16 @@ function Details({
         />{" "}
       </form>
       <p>Cost of the trip:</p>
-      <p>{(roadLength.toFixed(1) * price * 1.1).toFixed(2)} $</p>
+      <p>{(roadLength * price * 1.1).toFixed(2)} $</p>
+
       <div className="buttons">
-        <Link className={styles.link} to="/">
+        <Link to="/">
           <button>Home </button>
         </Link>
         <button onClick={handleSave}>Save trip</button>
       </div>
       <button onClick={generatePdf}>Download details</button>
-      {saved && <SaveModal />}
+      {saved && <Modal />}
     </div>
   );
-}
-
-export default Details;
+};

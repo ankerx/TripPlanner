@@ -1,10 +1,31 @@
+import { ChangeEvent, MouseEvent } from "react";
+import { Details } from "../../../App";
+
 import Trips from "../Trips/Trips";
-import styles from "./main.module.css";
-function Main({ handleSubmit, values, handleChange, details, errors }) {
+
+interface Props {
+  values: {
+    firstDestination: string;
+    secondDestination: string;
+  };
+  details: Details[];
+  errors: string;
+
+  handleSubmit: (event: MouseEvent<HTMLButtonElement>) => Promise<void>;
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const Form = ({
+  handleSubmit,
+  values,
+  handleChange,
+  details,
+  errors,
+}: Props) => {
   return (
     <>
-      <div className={styles.container}>
-        <form className={styles.form}>
+      <div>
+        <form>
           <input
             type="text"
             placeholder="Choose starting point"
@@ -20,11 +41,7 @@ function Main({ handleSubmit, values, handleChange, details, errors }) {
             onChange={handleChange}
           />
 
-          {errors && (
-            <p data-testid="error" className={styles.error}>
-              {errors}
-            </p>
-          )}
+          {errors && <p data-testid="error">{errors}</p>}
           <button onClick={handleSubmit}>Find the route</button>
         </form>
       </div>
@@ -32,6 +49,4 @@ function Main({ handleSubmit, values, handleChange, details, errors }) {
       <Trips details={details} />
     </>
   );
-}
-
-export default Main;
+};

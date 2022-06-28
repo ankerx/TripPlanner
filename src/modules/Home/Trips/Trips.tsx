@@ -1,8 +1,13 @@
+import { Details } from "../../../App";
 import Trip from "./Trip/Trip";
-import styles from "./trips.module.css";
-function Trips({ details }) {
+// import styles from "./trips.module.css";
+
+interface Props {
+  details: Details[];
+}
+function Trips({ details }: Props) {
   return (
-    <div className={styles.container}>
+    <div>
       {details && details.length > 0 ? (
         details.map((el, index) => (
           <Trip

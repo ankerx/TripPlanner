@@ -1,18 +1,25 @@
 import React from "react";
 
 import onResize from "simple-element-resize-detector";
-export const MapDisplay = ({ cords }) => {
+import { Cords, Data } from "../../../../App";
+interface Props extends Cords {
+  data: Data[];
+}
+export const MapDisplay = ({ cords, data }: Props) => {
   const KEY = "gfWzZOqGZJ_sGQ-L-zHN_9CrpD3D6rGn1v65eQW_CPg";
   // Create a reference to the HTML element we want to put the map on
   const mapRef = React.useRef(null);
-  const coordinates = cords ? cords.map((el) => el.data.items[0].position) : "";
-  const firstDestination = coordinates[0];
-  const secondDestination = coordinates[1];
-  const firstCords = `${firstDestination.lat},${firstDestination.lng}`;
-  const secondCords = `${secondDestination.lat},${secondDestination.lng}`;
+  // const coordinates = cords ? cords.map((el) => el.data.items[0].position) : "";
+  const coordinates1 = data ? data.map((item) => item.position.lat) : "";
+  const coordinates2 = data ? data.map((item) => item.position.lng) : "";
+  const firstDestination = coordinates1;
+  const secondDestination = coordinates2;
+  const firstCords = `${firstDestination},${firstDestination}`;
+  const secondCords = `${secondDestination},${secondDestination}`;
 
   React.useLayoutEffect(() => {
     if (!mapRef.current) return;
+    // @ts-ignore
     const H = window.H;
     const platform = new H.service.Platform({
       apikey: KEY,
@@ -36,10 +43,10 @@ export const MapDisplay = ({ cords }) => {
       // Include the route shape in the response
       return: "polyline",
     };
-    const onResult = (result) => {
+    const onResult = (result: any) => {
       // ensure that at least one route was found
       if (result.routes.length) {
-        result.routes[0].sections.forEach((section) => {
+        result.routes[0].sections.forEach((section: any) => {
           // Create a linestring to use as a point source for the route line
           let linestring = H.geo.LineString.fromFlexiblePolyline(
             section.polyline
@@ -68,9 +75,13 @@ export const MapDisplay = ({ cords }) => {
     };
 
     const router = platform.getRoutingService(null, 8);
-    router.calculateRoute(routingParameters, onResult, function (error) {
-      alert(error.message);
-    });
+    router.calculateRoute(
+      routingParameters,
+      onResult,
+      function (error: { message: string }) {
+        alert(error.message);
+      }
+    );
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
     const ui = H.ui.UI.createDefault(map, defaultLayers);
