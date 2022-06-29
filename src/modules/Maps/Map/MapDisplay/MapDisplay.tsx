@@ -9,13 +9,17 @@ export const MapDisplay = ({ cords, data }: Props) => {
   const KEY = "gfWzZOqGZJ_sGQ-L-zHN_9CrpD3D6rGn1v65eQW_CPg";
   // Create a reference to the HTML element we want to put the map on
   const mapRef = React.useRef(null);
-  // const coordinates = cords ? cords.map((el) => el.data.items[0].position) : "";
-  const coordinates1 = data ? data.map((item) => item.position.lat) : "";
-  const coordinates2 = data ? data.map((item) => item.position.lng) : "";
-  const firstDestination = coordinates1;
-  const secondDestination = coordinates2;
-  const firstCords = `${firstDestination},${firstDestination}`;
-  const secondCords = `${secondDestination},${secondDestination}`;
+  const coordinates = cords
+    ? cords.map((el: any) => el.data.items[0].position)
+    : "";
+  // const coordinates1 = data ? data.map(item => item.position.lat) : "";
+  // const coordinates2 = data ? data.map(item => item.position.lng) : "";
+  // const newData = data.map((item) => item);
+
+  const firstDestination = coordinates[0];
+  const secondDestination = coordinates[1];
+  const firstCords = `${firstDestination?.lat},${firstDestination?.lng}`;
+  const secondCords = `${secondDestination?.lat},${secondDestination?.lng}`;
 
   React.useLayoutEffect(() => {
     if (!mapRef.current) return;

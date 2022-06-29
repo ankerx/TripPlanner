@@ -35,7 +35,9 @@ function Map({
   saveDetails,
 }: Props) {
   const navigate = useNavigate();
-  const coordinates = cords ? cords.map((el) => el.data.items[0].position) : "";
+  const coordinates = cords
+    ? cords.map((el: any) => el.data.items[0].position)
+    : "";
   const [firstCords] = useState(
     `${coordinates[0]?.lat},${coordinates[0]?.lng}` || ""
   );
@@ -76,7 +78,6 @@ function Map({
           roadLength={roadLength}
           price={price}
           setPrice={setPrice}
-          // setDetails={setDetails}
           values={values}
           saveDetails={saveDetails}
         />
